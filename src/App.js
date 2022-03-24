@@ -1,18 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
-import ClassComponent from './components/ClassComponent';
-import { FunctionComponent} from './components/FunctionComponent';
+import { Task } from './components/Task';
+
+const TODO = [
+  {id: '1', title: 'valor', completed: false, description: 'description', steps: []},
+  {id: '2', title: 'valor 2', completed: false, description: 'description 2', steps: []},
+]
 
 function App() {
+
   return (
     <div className="App">
-      <ClassComponent />
-      <FunctionComponent />
-      <br />
-      <ClassComponent />
-      <FunctionComponent />
+      {TODO.map(task => <Task task={task} key={task.id}/>)}
     </div>
   );
+  
 }
 
 export default App;
