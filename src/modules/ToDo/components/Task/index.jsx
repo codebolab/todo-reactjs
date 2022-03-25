@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Task.css';
 import { Arrow } from '../../../../components/icons';
 import { TextBlock } from '../../../../components/TextBlock';
@@ -6,12 +6,27 @@ import { Text } from '../../../../components/Text';
 import { Input } from '../../../../components/Form/Input';
 import { Step } from '../Step';
 
-const Task = ({task}) => {
+const Task = ({task, onCheckTask}) => {
   const [showSteps, setShowSteps] = React.useState(false);
 
   const handleCheckTask = (e) => {
-    console.log(`handleCheckTask`, e.target.value)
+    onCheckTask(task.id)
   }
+
+/*   useEffect(() => {
+    console.log(`[${task.id}] useffect: cada se ejecuta`)
+  }) */
+
+  useEffect(() => {
+    console.log(`[${task.id}] useffect: al montar`)
+    return () => {
+      console.log(`[${task.id}] useffect: al desmontar`)
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log(`[${task.id}] useffect: cada se se actualizar ${task}`)
+  }, [task])
 
   return (
     <div className="task">
