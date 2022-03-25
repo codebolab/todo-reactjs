@@ -1,0 +1,36 @@
+.task-container{
+    display: flex;
+    /* position: relative; */
+    background-color: white;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.task-text{
+    margin: 0;
+    width: calc(100% - 30px);
+    text-align: left;
+}
+
+.task-steps{
+    /* position: absolute; */
+    background-color: red;
+    padding: 16px;
+    width: calc(100% - 32px);
+    left: 0;
+    bottom: 0;
+
+}
+
+.step-wrapper{
+    background: rgb(240, 240, 240);
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+    text-align: left;
+    padding: 0.5rem 1rem 1rem;
+    border-top: 1px solid rgba(0,0,0,0.2);
+}
+
+.description-block{
+    padding: 0 8px;
+}
