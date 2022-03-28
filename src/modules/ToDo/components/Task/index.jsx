@@ -5,17 +5,35 @@ import { TextBlock } from '../../../../components/TextBlock';
 import { Text } from '../../../../components/Text';
 import { Input } from '../../../../components/Form/Input';
 import { Step } from '../Step';
+import { Button } from '../../../../components/Button';
+import { uuid } from '../../../../utils/index';
 
-const Task = ({task, onCheckTask}) => {
+const Task = ({task, onRemoveTask, onAddStep, onCheckTask, onCheckStep}) => {
   const [showSteps, setShowSteps] = React.useState(false);
+  const [newStep, setNewStep] = React.useState('');
 
-  const handleCheckTask = (e) => {
-    onCheckTask(task.id)
+  const handleCheckTask = () => {
+    onCheckTask(task.id);
   }
 
-/*   useEffect(() => {
-    console.log(`[${task.id}] useffect: cada se ejecuta`)
-  }) */
+  const handleStepChecked = (idStep) => {
+    onCheckStep(task.id, idStep) 
+  }
+
+  const addStep = () => {
+    if(newStep.length < 3) return
+    const data = {
+      id: uuid(),
+      name: newStep,
+      completed: false
+    }
+    onAddStep(task.id, data);
+    setNewStep('')
+  }
+
+  const onRemove = () => {
+    if(onRemoveTask) onRemoveTask(task.id)
+  }
 
   useEffect(() => {
     console.log(`[${task.id}] useffect: al montar`)
@@ -30,7 +48,7 @@ const Task = ({task, onCheckTask}) => {
 
   return (
     <div className="task">
-      <div className="task-container">
+      <div className={`task-container ${task.completed && 'completed'}`}>
         <div style={{marginRight: 16}}>
           <Arrow
             direction={showSteps ? 'up' : 'down'}
@@ -48,14 +66,23 @@ const Task = ({task, onCheckTask}) => {
       { showSteps &&
         <div className="step-wrapper">
           { task.steps.length
-            ? task.steps.map((step) => <Step step={step} key={step.id}/>)
+            ? task.steps.map((step) => <Step step={step} key={step.id} onStepChecked={handleStepChecked}/>)
             : <Text text={'No existen pasos'} gray center/>
           }
-          <Input placeholder="Agregar nuevo paso"/>
+          <div style={{position: 'relative'}}>
+            <Input
+              placeholder="Agregar nuevo paso"
+              value={newStep}
+              onChange={(value) => setNewStep(value)}
+              onEnterPressed={addStep}
+            />
+            <div className='check-mark' onClick={addStep}>&#9745;</div>
+          </div>
           <div className='description-block'>
             <Text text={'Descripción:'} type={`sub-sub-title`}/>
             <TextBlock text={task.description}/>
           </div>
+          <Button onClick={onRemove} danger value={'Eliminar Tarea'} />
         </div>
       }
       

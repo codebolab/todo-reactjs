@@ -1,12 +1,25 @@
+.check-mark{
+    position: absolute;
+    right: 12px;
+    top: 2px;
+    cursor: pointer;
+    color: #a3be8c;
+    user-select: none;
+    font-size: 1.5rem;
+}
 .task-container{
     display: flex;
     /* position: relative; */
-    background-color: white;
+    background-color: #eceff4;
     box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
-    padding: 16px;
-    margin-top: 16px;
+    padding: 1rem;
+    margin-top: 1rem;
 }
-
+.task-container.completed{
+    background-color: #d8dee9;
+    text-decoration: line-through;
+    color: #4c566a;
+}
 .task-text{
     margin: 0;
     width: calc(100% - 30px);
@@ -14,9 +27,8 @@
 }
 
 .task-steps{
-    /* position: absolute; */
-    background-color: red;
-    padding: 16px;
+    background-color: #bf616a;
+    padding: 1rem;
     width: calc(100% - 32px);
     left: 0;
     bottom: 0;
@@ -32,5 +44,5 @@
 }
 
 .description-block{
-    padding: 0 8px;
+    padding: 0 0.5rem;
 }

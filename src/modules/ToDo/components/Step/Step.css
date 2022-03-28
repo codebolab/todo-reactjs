@@ -12,7 +12,10 @@
     text-align: left;
     padding: 8px 0 8px 16px;
 }
-
+.step-text.complete{
+    text-decoration: line-through;
+    color: #4c566a;
+}
 .step:last-child{
     border-bottom: none;
 }

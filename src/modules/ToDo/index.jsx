@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import { INITIAL_DATA } from '../../data';
 import { Task } from './components/Task';
 import { Text } from '../../components/Text';
+import { AddTask } from './components/AddTask';
+import { Button } from '../../components/Button';
+import { Modal } from '../../components/Modal';
 
 export const ToDoList = () => {
     const [ todoData, setTodoData ] = React.useState(INITIAL_DATA);
+    const [ isModalAddTaskOpen, setIsModalAddTaskOpen ] = React.useState(false)
 
-    // const [ counter, setCounter ] = React.useState(todoData.length);
 
     const counter = React.useMemo(() => {
         return todoData.length
@@ -14,40 +17,77 @@ export const ToDoList = () => {
 
     const addTask = (task) => {
         setTodoData([...todoData, task]);
+        setIsModalAddTaskOpen(false);
     }
 
-    const onRemoveTask = () => {
-        const newTodoData = [...todoData]
-        newTodoData.splice(-1)
-        setTodoData(newTodoData)
+    const removeTask = (idTask) => {
+        const newTodoData = todoData.filter((task => task.id !== idTask))
+        setTodoData(newTodoData);
     }
 
-    const onCheckTask = (id) => {
+    const onCheckTask = (idTask) => {
+        const newTodoData = todoData.map(task => task.id === idTask
+            ? {... task, completed: !task.completed}
+            : task
+        )
+        setTodoData(newTodoData);
+    }
+    const onCheckStep = (idTask, idStep) => {
+        const newTodoData = todoData.map(task => task.id === idTask ? {
+                ... task,
+                steps: task.steps.map((step) => step.id === idStep
+                    ? {...step, completed: !step.completed}
+                    : step
+                )
+            } : task
+        )
+        setTodoData(newTodoData);
+    }
+
+    const onAddStep = (idTask, newStep) => {
         const newTodoData = todoData.map(task => {
-            if(task.id == id){
-                return {...task, completed: !task.completed}
+            if(task.id === idTask){
+                task.steps.push(newStep)
+                return task
             }
             return task
         })
-        setTodoData(newTodoData)
+        setTodoData(newTodoData);
     }
-    const onCheckStep = (idTask, idStep) => {console.log(`compleonCheckStepteTask`)}
     
 
     return (<>
-        <div style={{backgroundColor: 'white'}}><Text text={`Tareas Totales: ${counter}`} gray /></div>
-        
-        <button onClick={() => {
-            addTask({
-                id: 't10',
-                name: 'Tarea 1',
-                completed: true,
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sodales tincidunt lobortis.',
-                steps: []
+        {todoData.length > 0 
+            ? todoData.map((task) => (
+                <Task
+                    task={task}
+                    key={task.id}
+                    onRemoveTask={(id) => removeTask(id)}
+                    onAddStep={onAddStep}
+                    onCheckTask={onCheckTask}
+                    onCheckStep={onCheckStep}
+                />
+            ))
+            : <div className='todo-empty'>
+                <Text center text="No tiene tareas" gray/>
+            </div>
+        }
 
-            })
-        }}>Agregar Tarea </button>
-        <button onClick={onRemoveTask}>Eliminar ultimo</button>
-        {todoData.map((task) => <Task task={task} key={task.id} onCheckTask={onCheckTask}/>)}
+        <div style={{marginTop: 16}}>
+            <Button
+                value="+ Agregar Tarea"
+                onClick={() => setIsModalAddTaskOpen(true)}
+            />
+        </div>
+
+        <Modal
+            isOpen={isModalAddTaskOpen}
+            onClose={() => setIsModalAddTaskOpen(false)}
+        >
+            <AddTask
+                onAddTask={addTask}
+                onCancel={() => setIsModalAddTaskOpen(false)}
+            />
+        </Modal>
     </>)
 } 
