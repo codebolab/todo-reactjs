@@ -1,28 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { INITIAL_DATA } from '../../data';
 import { Task } from './components/Task';
 import { Text } from '../../components/Text';
 import { AddTask } from './components/AddTask';
 import { Button } from '../../components/Button';
 import { Modal } from '../../components/Modal';
+import { Input, InputRef } from '../../components/Form/Input';
+import { UseReducerComponent } from '../../components/test/UseReducerComponent';
 
 export const ToDoList = () => {
     const [ todoData, setTodoData ] = React.useState(INITIAL_DATA);
+    // const todoFilteredData = useMemo(() => {}, [todoData])
+    const [ todoFilteredData, setTodoFilteredData ] = React.useState([]);
     const [ isModalAddTaskOpen, setIsModalAddTaskOpen ] = React.useState(false)
+    const searchRef = useRef()
+    const contador = useRef(0)
 
+    useEffect(() => {setTodoFilteredData(todoData)}, [todoData])
 
-    const counter = React.useMemo(() => {
-        return todoData.length
-    }, [todoData])
 
     const addTask = (task) => {
         setTodoData([...todoData, task]);
         setIsModalAddTaskOpen(false);
+        contador.current += 1;
     }
 
     const removeTask = (idTask) => {
         const newTodoData = todoData.filter((task => task.id !== idTask))
         setTodoData(newTodoData);
+        contador.current += 1;
     }
 
     const onCheckTask = (idTask) => {
@@ -31,7 +37,9 @@ export const ToDoList = () => {
             : task
         )
         setTodoData(newTodoData);
+        contador.current += 1;
     }
+
     const onCheckStep = (idTask, idStep) => {
         const newTodoData = todoData.map(task => task.id === idTask ? {
                 ... task,
@@ -42,6 +50,7 @@ export const ToDoList = () => {
             } : task
         )
         setTodoData(newTodoData);
+        contador.current += 1;
     }
 
     const onAddStep = (idTask, newStep) => {
@@ -54,11 +63,20 @@ export const ToDoList = () => {
         })
         setTodoData(newTodoData);
     }
+
+    const search = () => {
+        console.log(searchRef.current, contador.current )
+        setTodoFilteredData(todoData.filter(task => task.name.includes(searchRef.current.value)))
+    }
     
 
     return (<>
-        {todoData.length > 0 
-            ? todoData.map((task) => (
+        <UseReducerComponent />
+        <InputRef inputProps={{ref: searchRef}} placeholder={'buscador'} />
+        <Button value="Buscar" onClick={search} />
+        <Button value="enfocar" onClick={() => searchRef.current.focus()} />
+        {todoFilteredData.length > 0 
+            ? todoFilteredData.map((task) => (
                 <Task
                     task={task}
                     key={task.id}

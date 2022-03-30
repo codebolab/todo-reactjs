@@ -19,3 +19,17 @@ export const Input = ({value, onChange, placeholder, fullWidth}) => {
     </div>  
   )
 }
+
+export const InputRef = ({ placeholder, fullWidth, inputProps}) => {
+
+  return (
+    <div className={`input-container ${fullWidth ? 'full-width' : ''}`}>
+      <input
+        className='input-text'
+        type="text"
+        placeholder={placeholder}
+        {...inputProps}
+      />
+    </div>  
+  )
+}
