@@ -12,8 +12,8 @@ function App() {
         <Text text={'To Do List Project'} type="title"/>
       </div>
       <div>
-        {/* <ToDoList /> */}
-        <TodoListReducer />
+        <ToDoList />
+        {/* <TodoListReducer /> */}
       </div>
     </div>
   );

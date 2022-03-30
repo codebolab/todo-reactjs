@@ -5,6 +5,7 @@ import { Text } from '../../components/Text';
 import { AddTask } from './components/AddTask';
 import { Button } from '../../components/Button';
 import { Modal } from '../../components/Modal';
+import { TestHook } from '../../hook/testHook';
 
 const ACTIONS = {
     ADD_TASK: 'ADD_TASK',
@@ -50,11 +51,11 @@ function reducer(state, action) {
 }
 
 export const TodoListReducer = () => {
-    const [todoData, dispatch] = useReducer(reducer, INITIAL_DATA);
+    const [ todoData, dispatch ] = useReducer(reducer, INITIAL_DATA);
     const [ isModalAddTaskOpen, setIsModalAddTaskOpen ] = React.useState(false)
+    const {count, increase, decrease} = TestHook(10)
 
     const addTask = (task) => {
-        console.log(`---> addTask`, task)
         dispatch({type: ACTIONS.ADD_TASK, task})
         setIsModalAddTaskOpen(false);
     }
@@ -72,11 +73,15 @@ export const TodoListReducer = () => {
     }
 
     const onAddStep = (idTask, newStep) => {
-        dispatch({type: ACTIONS.ON_CHECK_STEP, idTask, newStep})
+        dispatch({type: ACTIONS.ON_ADD_STEP, idTask, newStep})
     }
 
     return (<>
-        {console.log(`render`, todoData)}
+        <div style={{background: 'white'}}>
+            <p>{count}</p>
+            <button onClick={increase}>+</button>
+            <button onClick={decrease}>-</button>
+        </div>
         {todoData.length > 0 
             ? todoData.map((task) => (
                 <Task

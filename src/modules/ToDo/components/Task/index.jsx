@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './Task.css';
 import { Arrow } from '../../../../components/icons';
 import { TextBlock } from '../../../../components/TextBlock';
@@ -7,8 +7,14 @@ import { Input } from '../../../../components/Form/Input';
 import { Step } from '../Step';
 import { Button } from '../../../../components/Button';
 import { uuid } from '../../../../utils/index';
+import { TodoContext } from '../../../../context/TodoContext';
 
-const Task = ({task, onRemoveTask, onAddStep, onCheckTask, onCheckStep}) => {
+const Task = ({task, /* onCheckTask */ /* onCheckStep */}) => {
+  const {
+    removeTask,
+    onCheckTask,
+    onAddStep
+  } = useContext(TodoContext);
   const [showSteps, setShowSteps] = React.useState(false);
   const [newStep, setNewStep] = React.useState('');
 
@@ -16,9 +22,6 @@ const Task = ({task, onRemoveTask, onAddStep, onCheckTask, onCheckStep}) => {
     onCheckTask(task.id);
   }
 
-  const handleStepChecked = (idStep) => {
-    onCheckStep(task.id, idStep) 
-  }
 
   const addStep = () => {
     if(newStep.length < 3) return
@@ -32,7 +35,7 @@ const Task = ({task, onRemoveTask, onAddStep, onCheckTask, onCheckStep}) => {
   }
 
   const onRemove = () => {
-    if(onRemoveTask) onRemoveTask(task.id)
+    removeTask(task.id)
   }
 
   useEffect(() => {
@@ -66,7 +69,7 @@ const Task = ({task, onRemoveTask, onAddStep, onCheckTask, onCheckStep}) => {
       { showSteps &&
         <div className="step-wrapper">
           { task.steps.length
-            ? task.steps.map((step) => <Step step={step} key={step.id} onStepChecked={handleStepChecked}/>)
+            ? task.steps.map((step) => <Step idTask={task.id} step={step} key={step.id} />)
             : <Text text={'No existen pasos'} gray center/>
           }
           <div style={{position: 'relative'}}>
