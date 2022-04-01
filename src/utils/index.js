@@ -6,3 +6,17 @@ export const uuid = () => {
         return (c=='x' ? r :(r&0x3|0x8)).toString(16);
     });
 }
+
+export const getLocalStorageData = (name, initialValue) => {
+    const localStorageItem = localStorage.getItem(name);
+    if(!localStorageItem){
+        localStorage.setItem(name, JSON.stringify(initialValue))
+        return initialValue;
+    }else{
+        return JSON.parse(localStorageItem)
+    }
+}
+
+export const setLocalStorageData = (name, value) => {
+    localStorage.setItem(name, JSON.stringify(value));
+}
